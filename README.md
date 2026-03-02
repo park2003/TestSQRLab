@@ -21,7 +21,7 @@ Linking SQRLab
 While still in the Package Manager (pkg>), run:
 
 ``` 
-dev "C:/Users/WHERE_YOU_IMPORT_PACKAGE/IonSim_Package"  # Adjust path as necessary
+dev "C:/Users/WHERE_YOU_IMPORT_PACKAGE/SQRLab"  # Adjust path as necessary
 ```
 
 
