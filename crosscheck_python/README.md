@@ -6,6 +6,7 @@ Independent of Julia. Needs `numpy` and `scipy`. These produced the "expected re
 | --- | --- |
 | `engine.py` | Port of the 1113 engine (Strang split, exact noise step, exact ∂/∂β). `python3 engine.py` reproduces the 1113 benchmark tables. |
 | `laser_check.py` | Replaces the ideal readout D(±iα) with a bichromatic sideband laser: exact e^{iηx} coupling (RWA), and the full time-dependent Hamiltonian with carrier and counter-rotating terms at inflated Ω/ν. |
+| `tk_check.py` | Checks the T^(k) noise step and the Strang density matrix against a direct Lindblad solve, and compares with the 1104 Lie + Kraus scheme. |
 | `readout_noise.py` | Lets the motional noise act during a finite-time readout of rate s·β (s = 1 is the 1104 timing). |
 
 Run from this folder: `python3 laser_check.py` (about 1 min), `python3 readout_noise.py` (about 20 s).
