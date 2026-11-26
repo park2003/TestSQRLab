@@ -1,0 +1,326 @@
+\subsection{Repeated versus Accumulated Signal: Scaling of the QCRB with the Number of Rounds}
+
+The bounds derived so far refer to a single sensing shot of duration $t_{sig}$. A given total exposure can be spent in two ways. In protocol A the signal is accumulated for $t_{sig}$, read out, and the motion and ancilla are re-initialised; this is repeated $m$ times. In protocol B the same total time $m\,t_{sig}$ is spent in one uninterrupted exposure followed by a single readout. Both protocols collect the same total displacement. This subsection derives how the QCRB of each protocol scales with $m$, first without noise and then under the Markovian channels of the previous sections, and identifies where the accumulated protocol loses its advantage.
+
+\subsubsection{Setup}
+
+We model the signal as a constant force with drive rate $\kappa$,
+%
+\begin{equation}
+    \hat{H}_{drive} = i\kappa\left(\hat{a}^\dagger - \hat{a}\right) = i\kappa\,\hat{G},
+    \qquad
+    \beta = \kappa\, t_{sig},
+\end{equation}
+%
+so that a noiseless exposure of duration $T$ produces $\hat{D}(\kappa T)$. The estimated parameter is $\kappa$, or equivalently the per-round displacement $\beta$; all bounds below are quoted for $\beta$, $\mathrm{QCRB}_\beta = t_{sig}^2\,\mathrm{QCRB}_\kappa$. Denoting by $F(T)$ the Fisher information of one shot of duration $T$ with respect to $\kappa$, the independence of the rounds in protocol A and the single readout in protocol B give
+%
+\begin{equation}
+\label{eq:FA-FB}
+    F_A = m\,F(t_{sig}),
+    \qquad
+    F_B = F(m\,t_{sig}),
+    \qquad
+    R(m) \equiv \frac{\mathrm{QCRB}_A}{\mathrm{QCRB}_B} = \frac{F(m\,t_{sig})}{m\,F(t_{sig})},
+\end{equation}
+%
+where $R > 1$ means the accumulated protocol B is better. The additivity in $F_A$ holds because the re-initialised rounds are independent: the joint state is $\rho_\beta^{\otimes m}$, its symmetric logarithmic derivative is $\hat{L} = \sum_i \hat{L}_i$, and the cross terms $\mathrm{Tr}[\rho\hat{L}_i]\,\mathrm{Tr}[\rho\hat{L}_j]$ vanish since $\mathrm{Tr}[\rho\hat{L}_i] = \mathrm{Tr}[\partial_\beta\rho] = 0$. As a check, the QFI of the $2^m$-dimensional product of reduced ancilla states, computed directly from its eigen-decomposition, equals $m F_1$ to six digits for $m = 2$--$5$ ($n = 3$, $\beta = 0.1$, $\Gamma_\phi t_{sig} = 2.5$: $F_1 = 1.273120$, $F_5 = 6.365599$). All comparisons below use the absolute bound $\mathrm{QCRB} = 1/\sum_i F_i$; gains relative to the vacuum are not used to rank protocols, since the vacuum reference itself changes with the noise.
+
+\subsubsection{Noiseless case: $1/m$ versus $1/m^2$}
+
+A displacement only rotates the phase of the ancilla coherence. Using $\hat{D}^\dagger(\beta)\hat{D}(\gamma)\hat{D}(\beta) = \hat{D}(\gamma)\,e^{\gamma\beta^* - \gamma^*\beta}$ with $\gamma = 2i\alpha$ and real $\beta = \kappa T$, the exponent is $\gamma\beta^* - \gamma^*\beta = 4i\alpha\kappa T$, so
+%
+\begin{equation}
+\label{eq:C-covariant}
+    C(\alpha; T) = \mathrm{Tr}\!\left[\hat{D}(2i\alpha)\,\hat{D}(\kappa T)\rho_0\hat{D}^\dagger(\kappa T)\right]
+    = e^{4i\alpha\kappa T}\, C_0(\alpha),
+    \qquad
+    C_0(\alpha) = \mathrm{Tr}\!\left[\hat{D}(2i\alpha)\rho_0\right].
+\end{equation}
+%
+For the squeezed Fock state $\rho_0 = \hat{S}(r)\vert n\rangle\langle n\vert\hat{S}^\dagger(r)$ the characteristic function is real, $C_0(\alpha) = e^{-2\alpha^2 e^{-2r}} L_n(4\alpha^2 e^{-2r})$. Differentiating Eq.~\eqref{eq:C-covariant},
+%
+\begin{equation}
+    \partial_\kappa C = 4i\alpha T\, C,
+    \qquad
+    \vert \partial_\kappa C \vert^2 = 16\alpha^2 T^2 C_0^2,
+    \qquad
+    \mathrm{Re}\!\left[C^*\partial_\kappa C\right] = \mathrm{Re}\!\left[4i\alpha T \vert C\vert^2\right] = 0,
+\end{equation}
+%
+so the contrast term of $\mathrm{QCRB}_{unified}$ vanishes and
+%
+\begin{equation}
+\label{eq:F-noiseless}
+    F(T) = 16\alpha^2 T^2 C_0(\alpha)^2 = \frac{T^2}{\mathrm{QCRB}_0(\alpha)},
+    \qquad
+    \mathrm{QCRB}_0(\alpha) = \frac{e^{4\alpha^2 e^{-2r}}}{16\alpha^2 L_n(4\alpha^2 e^{-2r})^2},
+\end{equation}
+%
+which is the noiseless closed form, eq.~(33). Inserting $T = t_{sig}$ and $T = m\,t_{sig}$ into Eq.~\eqref{eq:FA-FB},
+%
+\begin{equation}
+\label{eq:noiseless-scaling}
+    \mathrm{QCRB}_A = \frac{\mathrm{QCRB}_0}{m},
+    \qquad
+    \mathrm{QCRB}_B = \frac{\mathrm{QCRB}_0}{m^2},
+    \qquad
+    R(m) = m .
+\end{equation}
+%
+Because $\mathrm{QCRB}_0(\alpha)$ does not depend on $T$, the optimal readout $\alpha^*$ is the same for both protocols, and protocol B needs no re-tuning. Physically, protocol B accumulates the phase $4\alpha\kappa T$ coherently, so its information grows as $T^2$, whereas protocol A averages $m$ independent estimates, so its information grows as $m$.
+
+The engine reproduces Eq.~\eqref{eq:noiseless-scaling} exactly (Table~\ref{tab:noiseless-m}): with $\beta = 0.5$ per round, $m^2\,\mathrm{QCRB}_B/\mathrm{QCRB}_0 = 1.0000$ for every $n$ and $m$, and $\alpha^*$ is unchanged.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c c c c c}
+\hline
+$n$ & $\mathrm{QCRB}_0$ ($\alpha^*$) & $m$ & $\mathrm{QCRB}_A$ & $\mathrm{QCRB}_B$ & $m^2\mathrm{QCRB}_B/\mathrm{QCRB}_0$ \\
+\hline
+0 & 0.6796 (0.50) & 2 / 4 / 8 & 0.3398 / 0.1699 / 0.0850 & 0.1699 / 0.04247 / 0.01062 & 1.0000 \\
+1 & 0.3749 (0.97) & 2 / 4 / 8 & 0.1874 / 0.0937 / 0.0469 & 0.09372 / 0.02343 / 0.005858 & 1.0000 \\
+3 & 0.2564 (1.63) & 2 / 4 / 8 & 0.1282 / 0.0641 / 0.0321 & 0.06411 / 0.01603 / 0.004007 & 1.0000 \\
+\hline
+\end{tabular}
+\caption{Noiseless scaling, engine with $\beta = 0.5$ per round. $\alpha^*$ is identical for every $m$.}
+\label{tab:noiseless-m}
+\end{table}
+
+\subsubsection{Signal saturation under Markovian noise}
+
+With noise, the lever arm of the signal is no longer $T$. The Heisenberg-picture equation for the mean amplitude follows from the adjoint dissipators: $\mathcal{L}^\dagger_{cool}[\hat{a}] = -\tfrac{\Gamma_c}{2}\hat{a}$, $\mathcal{L}^\dagger_{heat}[\hat{a}] = +\tfrac{\Gamma_h}{2}\hat{a}$, and, using $\hat{n}\hat{a} = \hat{a}(\hat{n}-1)$, $\mathcal{L}^\dagger_{dephase}[\hat{a}] = \Gamma_\phi\hat{a}\left[(\hat{n}-1)\hat{n} - \tfrac{1}{2}(\hat{n}-1)^2 - \tfrac{1}{2}\hat{n}^2\right] = -\tfrac{\Gamma_\phi}{2}\hat{a}$. Together with $i[\hat{H}_{drive}, \hat{a}] = \kappa$,
+%
+\begin{equation}
+\label{eq:leaky}
+    \frac{d\langle\hat{a}\rangle}{dt} = \kappa - \frac{\Gamma_L}{2}\langle\hat{a}\rangle,
+    \qquad
+    \Gamma_L = \Gamma_\phi + \Gamma_c - \Gamma_h,
+    \qquad
+    \langle\hat{a}\rangle(T) = \kappa T\, f(\Gamma_L T),
+    \quad
+    f(y) = \frac{2}{y}\left(1 - e^{-y/2}\right),
+\end{equation}
+%
+for every initial state with $\langle\hat{a}\rangle_0 = 0$. The function $f$ is the laser-drift factor of eq.~(71), now with the dephasing rate included. The mode behaves as a leaky integrator: the displacement saturates at $2\kappa/\Gamma_L$ once $\Gamma_L T \gtrsim 2$, while the noise continues to act.
+
+\paragraph{Pure dephasing in the small-signal limit is exactly the leaky integrator.} For a number-diagonal state $\rho_0$ (any Fock state), the derivative at $\kappa \to 0$ follows from first-order perturbation theory in the drive,
+%
+\begin{equation}
+    \partial_\kappa\rho_T\big\vert_{\kappa\to0} = \int_0^T e^{\mathcal{L}_{dephase}(T-s)}\left[\hat{G},\, e^{\mathcal{L}_{dephase}s}\rho_0\right] ds .
+\end{equation}
+%
+Dephasing leaves $\rho_0$ invariant, and $[\hat{G}, \rho_0]$ lives only on the first super- and sub-diagonal ($k = \pm1$), where the dephasing mask of Eq.~(124) multiplies by $e^{-\Gamma_\phi(T-s)/2}$. Hence
+%
+\begin{equation}
+    \partial_\kappa\rho_T = T f(\Gamma_\phi T)\,[\hat{G}, \rho_0],
+    \qquad
+    \rho_T = \rho_0 + \mathcal{O}(\kappa),
+\end{equation}
+%
+which differs from the noiseless derivative only by the factor $f$. Therefore $\partial_\kappa C \to f\,\partial_\kappa C$ while $C$ is unchanged, and
+%
+\begin{equation}
+\label{eq:small-signal-exact}
+    \mathrm{QCRB}(\Gamma_\phi t_{sig}) = \frac{\mathrm{QCRB}_0}{f(\Gamma_\phi t_{sig})^2}
+    \qquad (\beta \to 0,\ \text{number-diagonal } \rho_0).
+\end{equation}
+%
+Since the factor is the same for every $n$, dephasing alone never removes the Fock advantage in this limit. The engine confirms Eq.~\eqref{eq:small-signal-exact} to $5\times10^{-5}$ (Table~\ref{tab:small-signal}).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c c c c}
+\hline
+$n$ & $\Gamma_\phi t_{sig}$ & engine $\mathrm{QCRB}$ & $\mathrm{QCRB}_0/f^2$ & ratio \\
+\hline
+0 & 0.1 / 1 / 3 & 0.71426 / 1.09737 / 2.53361 & 0.71426 / 1.09737 / 2.53350 & 1.000000 / 1.000005 / 1.000046 \\
+1 & 0.1 / 1 / 3 & 0.39402 / 0.60537 / 1.39766 & 0.39402 / 0.60536 / 1.39760 & 1.000000 / 1.000005 / 1.000046 \\
+3 & 0.1 / 1 / 3 & 0.26952 / 0.41408 / 0.95602 & 0.26952 / 0.41408 / 0.95598 & 1.000000 / 1.000005 / 1.000046 \\
+\hline
+\end{tabular}
+\caption{Small-signal dephasing ($\beta = 10^{-4}$): engine against Eq.~\eqref{eq:small-signal-exact}. The residual is $\mathcal{O}(\beta^2)$.}
+\label{tab:small-signal}
+\end{table}
+
+\paragraph{Advantage ratio and local exponent.} With $F(T) = T^2 f(\Gamma_L T)^2/\mathrm{QCRB}_0$ and $x = \Gamma_L t_{sig}$ the noise per round, Eq.~\eqref{eq:FA-FB} gives
+%
+\begin{equation}
+\label{eq:R-leaky}
+    R(m) = m\,\frac{f(mx)^2}{f(x)^2}.
+\end{equation}
+%
+Writing $\mathrm{QCRB}_B \propto m^{-\nu}$ and $y = m\Gamma_L t_{sig}$ for the total noise of the accumulated exposure, $\nu = 2 + 2y f'(y)/f(y)$. With $y f'/f = \tfrac{y}{2}e^{-y/2}/(1 - e^{-y/2}) - 1$,
+%
+\begin{equation}
+\label{eq:nu}
+    \nu(y) = \frac{y}{e^{y/2} - 1}.
+\end{equation}
+%
+The accumulated protocol retains near-quadratic scaling, $\nu \geq 1.85$, only while $y \lesssim 0.3$ ($\nu = 1.950, 1.902, 1.854, 1.760, 1.542$ at $y = 0.1, 0.2, 0.3, 0.5, 1$). Its advantage over protocol A is largest where $dR/dm = 0$, i.e. where $\nu = 1$:
+%
+\begin{equation}
+    y^* = e^{y^*/2} - 1
+    \;\Longleftrightarrow\;
+    (1 + y^*)\,e^{-y^*/2} = 1,
+    \qquad
+    y^* = 2.5129 .
+\end{equation}
+%
+Using $e^{-y^*/2} = 1/(1+y^*)$, the maximum advantage takes the closed form
+%
+\begin{equation}
+\label{eq:Rmax}
+    R_{max} = \frac{4y^*}{(1+y^*)^2}\,\frac{1}{x f(x)^2} = \frac{0.8145}{x f(x)^2} \approx \frac{0.81}{\Gamma_L t_{sig}},
+    \qquad
+    m^* = \frac{y^*}{\Gamma_L t_{sig}} .
+\end{equation}
+%
+Beyond $m^*$ the accumulated bound stops improving ($\nu \to 0$; $\nu = 0.447$ at $y = 5$ and $0.068$ at $y = 10$), and since $f(mx) \to 2/(mx)$, $R(m) \to 4/[m x^2 f(x)^2]$. Protocol A therefore overtakes protocol B at
+%
+\begin{equation}
+    m_\times \simeq \frac{4}{x^2 f(x)^2} \approx \frac{4}{(\Gamma_L t_{sig})^2}.
+\end{equation}
+%
+For $x = 0.01$, $0.05$ and $0.2$, Eq.~\eqref{eq:Rmax} gives $R_{max} = 81.9$, $16.7$ and $4.50$ at $m^* = 251$, $50$ and $13$, with $m_\times = 40\,200$, $1\,640$ and $110$, in agreement with direct evaluation of Eq.~\eqref{eq:R-leaky}.
+
+\paragraph{Optimal chunk length at a fixed time budget.} If the total budget $\Gamma_\phi T$ is fixed and may be divided into $m$ rounds of noise $x = \Gamma_\phi T/m$ each, the variance of the total signal $M = \kappa T$ is $m\,\mathrm{QCRB}_0/f(x)^2 = \Gamma_\phi T\,\mathrm{QCRB}_0/[x f(x)^2]$. It is minimised at the same $x = y^*$, giving
+%
+\begin{equation}
+\label{eq:chunk}
+    \mathrm{Var}(M)_{min} = \frac{(1+y^*)^2}{4y^*}\,\Gamma_\phi T\,\mathrm{QCRB}_0(n) = 1.2277\,\Gamma_\phi T\,\mathrm{QCRB}_0(n),
+\end{equation}
+%
+which for $n = 5$ and $\Gamma_\phi T = 20$ gives $5.24$, the value found numerically below (Table~\ref{tab:budget}).
+
+\subsubsection{Thermal channel}
+
+Cooling and heating leave the signal Gaussian, and the closed form of eqs.~(74) and (106) applies to both protocols with $t_{sig} \to m\,t_{sig}$, so that $R(m) = m\,\mathrm{QCRB}(x)/\mathrm{QCRB}(mx)$ exactly. The drift factor is the leaky integrator with $\Gamma_L = \Gamma_c - \Gamma_h$, but two further effects act during the long exposure of protocol B: the variance term $B$ grows towards the thermal value, and the Laguerre argument is multiplied by $e^{-(\Gamma_c-\Gamma_h)m t_{sig}}$, so the Fock resource decays. For the vacuum, $R(m)$ follows Eq.~\eqref{eq:R-leaky} (cooling only, $\Gamma_c t_{sig} = 0.05$: $R_{max} = 16.7$ at $m = 50$). For Fock states the advantage is lost much earlier: at $\Gamma_c t_{sig} = 0.05$, $n = 3$ gives $R = 1.19$ at $m = 2$ and $1.32$ at $m = 5$.
+
+\subsubsection{Dephasing at finite signal}
+
+Equation~\eqref{eq:small-signal-exact} holds for $\beta \to 0$. At finite $\beta$ the accumulated displacement $m\beta$ widens the phonon-number distribution, $\mathrm{Var}(\hat{n}) = \vert m\beta\vert^2(2n+1)$ for a displaced Fock state, and dephasing acts on these coherences. This adds a penalty that grows with both $m\beta$ and $n$ (Table~\ref{tab:finite-beta}). The leaky-integrator value is therefore an upper bound on $R(m)$, and the accumulated protocol favours lower Fock states as $m$ grows. At $\beta = 0.1$ and $\Gamma_\phi t_{sig} = 0.1$, protocol A is already better from $m \approx 50$ for $n = 1$ and from $m \approx 25$ for $n = 3$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l c c c}
+\hline
+per round & $R_{max}$ ($m^*$), $n = 0$ & $n = 1$ & $n = 3$ \\
+\hline
+leaky integrator, Eq.~\eqref{eq:R-leaky}, $x = 0.1$ & \multicolumn{3}{c}{8.56 (25), independent of $n$} \\
+$\Gamma_\phi t_{sig} = 0.1$, $\beta = 0.03$ & 9.11 (35) & 7.60 (18) & 6.37 (12) \\
+$\Gamma_\phi t_{sig} = 0.1$, $\beta = 0.1$ & 6.42 (18) & 4.92 (8) & 3.88 (8) \\
+$\Gamma_\phi t_{sig} = 0.1$, $\beta = 0.2$ & 4.93 (8) & 3.59 (5) & 2.93 (5) \\
+365 / 50 / 10~Hz ratios, $\Gamma_\phi t_{sig} = 0.05$, $\beta = 0.05$ & 11.4 (25) & 6.37 (12) & 3.56 (8) \\
+\hline
+\end{tabular}
+\caption{Maximum advantage of the accumulated protocol at finite signal (engine, 121--181 levels, top-level population $\leq 10^{-32}$). The last row's leaky-integrator value is $15.0$ ($x_L = 0.0555$).}
+\label{tab:finite-beta}
+\end{table}
+
+\subsubsection{Strong-dephasing regime: the contrast term restores the $m^2$ law}
+
+In the re-entrant regime, $\Gamma_\phi t_{sig} \gg 4\beta^2(n+1)$, the drive acts on the populations as a hot bath of strength $\Gamma_\beta = 4\beta^2/(\Gamma_\phi t_{sig})$, and the signal is read mainly through the contrast term. With $X = \Gamma_\phi t_{sig}$ the strong-dephasing closed form gives the per-round Fisher information of the two protocols as
+%
+\begin{align}
+    F_A &= m\,\frac{64\alpha^2 V_1^2}{X^2}\left[1 + \frac{16\alpha^2\beta^2}{1 - V_1^2}\right], \\
+    F_B &= \frac{64\alpha^2 V_m^2}{X^2}\left[1 + \frac{16\alpha^2 m^2\beta^2}{1 - V_m^2}\right],
+    \qquad
+    V_m = e^{-2\alpha^2(1 + 2m\Gamma_\beta)}\,L_n(4\alpha^2),
+\end{align}
+%
+obtained from the single-shot form by $X \to mX$, $\beta \to m\beta$ and dividing by $m^2$. The phase term (the leading 1) is independent of $m$ in $F_B$, so it favours protocol A by a factor $m$, consistent with Eq.~\eqref{eq:R-leaky} for $x \gg 1$. The contrast term grows as $m^2$ in $F_B$, so it favours protocol B by a factor $m$, for as long as $V_m \approx V_1$, i.e. while the accumulated drive bath $m\Gamma_\beta$ remains small compared with the Fock break-even $\Gamma_\beta \approx 0.117$. Because the contrast figure of merit $16\alpha^4 V_n^2/(1 - V_n^2)$ grows 35-fold from $n = 0$ to $n = 5$, the accumulated protocol also keeps the highest Fock state (Table~\ref{tab:reentrant}). The advantage disappears once $m\Gamma_\beta = 4m\beta^2/(\Gamma_\phi t_{sig})$ reaches $0.05$--$0.1$, i.e. for $m \gtrsim \Gamma_\phi t_{sig}/(80\beta^2)$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{p{3.4cm} c p{3.6cm} p{6.0cm}}
+\hline
+per round & $\Gamma_\beta$ & best $n$ in B & $R(m)$, best $n$ in each protocol \\
+\hline
+$\Gamma_\phi t_{sig} = 300$, $\beta = 0.3$ & 0.0012 & 5 at every $m$ & 1.75, 2.46, 3.71, 5.17, 6.47, 7.42 at $m = 2, 3, 5, 8, 12, 18$ \\
+$\Gamma_\phi t_{sig} = 300$, $\beta = 1$ & 0.0133 & $5 \to 3 \to 2 \to 1$ & 1.22 at $m = 2$; $< 1$ from $m = 5$ ($m\Gamma_\beta = 0.067$) \\
+$\Gamma_\phi t_{sig} = 100$, $\beta = 1$ & 0.040 & $5 \to 2 \to 1$ & $< 1$ from $m = 2$ \\
+\hline
+\end{tabular}
+\caption{Strong-dephasing regime (engine, $n \leq 5$, $\alpha \leq 4.5$).}
+\label{tab:reentrant}
+\end{table}
+
+The contrast information scales as $\beta^2$: it is insensitive to the sign of the signal, refers to a known non-zero operating point, and vanishes for vanishing force. Absolute bounds in this regime are about $10^3$ times the noiseless value, so whenever the round length can be chosen, Eq.~\eqref{eq:chunk} is the relevant optimum.
+
+\subsubsection{Fixed time budget: splitting versus one long exposure}
+
+At a fixed total budget $\Gamma_\phi T$ and total signal $M = \kappa T$, the strategies differ only in how the time is divided. Dividing into $m$ rounds of $(\Gamma_\phi t_{sig}, \beta) = (\Gamma_\phi T/m,\, M/m)$ and summing the Fisher information of the independent rounds gives the absolute bound on the total signal,
+%
+\begin{equation}
+    \mathrm{Var}(M) = \Big[\sum_{i=1}^m F_i\Big]^{-1}\!\cdot m^2 = m\,\mathrm{QCRB}_{round}\!\left(\tfrac{\Gamma_\phi T}{m}, \tfrac{M}{m}\right),
+\end{equation}
+%
+where $m = 1$ is the single long exposure. In the small-signal limit, Eq.~\eqref{eq:small-signal-exact} gives the summation value $\mathrm{Var}(M) = m\,\mathrm{QCRB}_0(n)/f(\Gamma_\phi T/m)^2$, with minimum Eq.~\eqref{eq:chunk}. Table~\ref{tab:budget} lists the engine values for $\Gamma_\phi T = 20$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c p{2.6cm} p{2.6cm} c p{2.0cm} p{2.0cm}}
+\hline
+$M$ & one exposure: $\mathrm{Var}(M)$ (best $n$) & best division: $m$, $n$, $\mathrm{Var}(M)$ & one / best & vacuum, one exposure & vacuum, best division \\
+\hline
+0.1 & 14.76 (5) & 8, 5, 5.244 & 2.82 & 65.38 & 16.69 \\
+0.3 & 6.026 (5) & 8, 5, 5.242 & 1.15 & 50.22 & 16.68 \\
+0.5 & 5.819 (5) & 8, 5, 5.238 & 1.11 & 35.39 & 16.68 \\
+0.8 & 7.964 (2) & 3, 5, 5.056 & 1.58 & 22.97 & 16.67 \\
+\hline
+\end{tabular}
+\caption{Absolute bound on the total signal at the fixed budget $\Gamma_\phi T = 20$ (engine, $n \leq 5$, $m \in \{1,\dots,40\}$). The small-signal summation value for $n = 5$ is $5.241$ at $m = 8$ and $21.35$ at $m = 1$.}
+\label{tab:budget}
+\end{table}
+
+Three features follow. First, the optimum is essentially independent of $M$, $\mathrm{Var}(M) \approx 5.1$--$5.2$, and is reached by rounds of $\Gamma_\phi t_{sig} \approx 2.5$, as predicted by Eq.~\eqref{eq:chunk}. For $m \geq 8$ the engine agrees with the small-signal summation value to $0.6\%$ or better at every $M$. Second, at finite signal the contrast term makes long rounds better than the small-signal prediction. The single exposure at $M = 0.3$--$0.5$ reaches $6.0$ and $5.8$, against $21.35$ from the summation formula, so it lies only $11$--$15\%$ above the optimum. At $M = 0.8$ the best division ($m = 3$) beats the small-signal optimum by $3.5\%$. Third, at $M = 0.1$ the contrast term is negligible, and the single exposure is $2.8$ times worse than the best division. The vacuum gains a factor $2$--$4$ from division at every $M$. High Fock states therefore allow the state-preparation and readout overhead of the divided protocol to be avoided at a $11$--$15\%$ cost when $M \approx 0.3$--$0.5$, i.e. when the accumulated drive bath $4M^2/(\Gamma_\phi T) \approx 0.02$--$0.05$.
+
+\subsubsection{Crossover between one exposure and division}
+
+Without noise, dividing a fixed time $T$ into $m$ rounds gives $\mathrm{Var}(M) = m\,\mathrm{QCRB}_0$, since the single-round bound does not depend on the signal size (Eq.~\eqref{eq:F-noiseless}); one exposure is optimal by a factor $m$. With noise and a small signal, the summation value at a total noise $Y = \Gamma_L T$ is
+%
+\begin{equation}
+    \mathrm{Var}(M; m) = \frac{m\,\mathrm{QCRB}_0}{f(Y/m)^2} = \frac{\mathrm{QCRB}_0\, Y^2}{4m\left(1 - e^{-Y/2m}\right)^2}.
+\end{equation}
+%
+Division into two rounds is better than one exposure when $\mathrm{Var}(M;2) < \mathrm{Var}(M;1)$. With $u = 1 - e^{-Y/4}$ and $1 - e^{-Y/2} = u\,(1 + e^{-Y/4})$, this reads $8u^2 > 4u^2(1 + e^{-Y/4})^2$, i.e.
+%
+\begin{equation}
+\label{eq:crossover}
+    \left(1 + e^{-Y/4}\right)^2 < 2
+    \;\Longleftrightarrow\;
+    \Gamma_L T > Y_\times = 4\ln\!\left(1 + \sqrt{2}\right) = 3.5255 .
+\end{equation}
+%
+The factor $\mathrm{QCRB}_0(n)$ cancels, so for pure dephasing at small signal the crossover is the same for every Fock state; the engine gives $3.53$ at $M = 0.01$ for $n = 0, 1, 3, 5$. More generally, $m + 1$ rounds overtake $m$ rounds when
+%
+\begin{equation}
+    (m+1)\left(1 - e^{-Y/2(m+1)}\right)^2 = m\left(1 - e^{-Y/2m}\right)^2 ,
+\end{equation}
+%
+which gives $Y = 3.525$, $6.138$, $8.693$, $11.228$ and $13.756$ for the transitions to $m = 2, \dots, 6$. The spacing approaches $y^* = 2.513$, so the optimal number of rounds is $m \approx \Gamma_L T/y^*$, consistent with Eq.~\eqref{eq:chunk}.
+
+At finite signal the crossover depends on $M$ and $n$ (Table~\ref{tab:crossover}). Two effects compete. The contrast term favours the single exposure and delays the crossover, most strongly for high Fock states at moderate signal: at $M = 0.3$, $n = 5$ keeps one exposure optimal up to $\Gamma_\phi T = 11.5$, with the two strategies within $3\%$ of each other between $\Gamma_\phi T \approx 4$ and $11$. The accumulated displacement works the other way. At weak dephasing the effective drive bath $4M^2/(\Gamma_\phi T)$ of a single exposure is large, which degrades displaced high-$n$ states, so for $M \geq 0.5$ and $n \geq 3$ division already wins at $\Gamma_\phi T \approx 1$--$3$. In some cases a narrow window follows: for $n = 1$, $M = 0.8$, one exposure is again better by up to $4\%$ for $\Gamma_\phi T \approx 10$--$20$, before division wins for good. At large total noise, division always wins once enough rounds are allowed; at $\Gamma_\phi T = 100$ it is better by factors of $1.06$--$13$ across Table~\ref{tab:crossover}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c c c c}
+\hline
+$M$ & $n = 0$ & $n = 1$ & $n = 3$ & $n = 5$ \\
+\hline
+0.01 & 3.53 & 3.53 & 3.53 & 3.53 \\
+0.1  & 3.55 & 3.59 & 3.70 & 3.81 \\
+0.3  & 3.79 & 4.31 & 7.41 & 11.5 \\
+0.5  & 4.41 & 8.47 & 2.56 & 1.50 \\
+0.8  & 8.36 & 3.17 & 1.12 & $\approx 0.85$ \\
+\hline
+\end{tabular}
+\caption{Total dephasing $\Gamma_\phi T$ above which the best division ($m \leq 48$) first beats one exposure (engine, pure dephasing). Small-signal value: Eq.~\eqref{eq:crossover}, $3.5255$.}
+\label{tab:crossover}
+\end{table}
+
+For the thermal channel the closed form gives the crossover in $\Gamma_c T$ directly. With cooling only, the vacuum crosses at exactly $3.525$, as Eq.~\eqref{eq:crossover} predicts with $\Gamma_L = \Gamma_c$. Fock states cross much earlier, because cooling depopulates $\vert n\rangle$ during a long exposure: $n = 1$ at $0.396$, $n = 3$ at $0.132$ and $n = 5$ at $0.077$. With heating added ($\Gamma_h = \Gamma_c/5$), the vacuum crosses at $3.94$, compared with the leaky-integrator value $4.41$, because heating also adds variance. Fock states again cross early, but the preferred strategy alternates more than once with $\Gamma_c T$, so it should be read from the full curve rather than from a single threshold.
+
+\subsubsection{Summary}
+
+Without noise the accumulated protocol scales as $m^{-2}$ against $m^{-1}$ for repeated rounds, at the same optimal readout. Under Markovian noise its scaling exponent is $\nu(y) = y/(e^{y/2}-1)$ with $y = m\Gamma_L t_{sig}$ and $\Gamma_L = \Gamma_\phi + \Gamma_c - \Gamma_h$: near-quadratic for $y \lesssim 0.3$, maximal advantage $R_{max} \approx 0.81/(\Gamma_L t_{sig})$ at $y^* = 2.513$, and loss of the advantage at $m_\times \simeq 4/(\Gamma_L t_{sig})^2$. This is exact for pure dephasing at small signal and an upper bound otherwise. A finite accumulated signal, and cooling for Fock states, move the peak to smaller $m$ and lower Fock numbers. In the strong-dephasing re-entrant regime the contrast term restores an advantage of order $m$ together with the highest Fock state, provided $4m\beta^2/(\Gamma_\phi t_{sig}) \lesssim 0.05$. When the round length is free, the optimum is a hybrid of rounds with $\Gamma_\phi t_{sig} \approx 2.5$, reaching $\mathrm{Var}(M) = 1.228\,\Gamma_\phi T\,\mathrm{QCRB}_0(n)$. At a fixed budget, division first beats one exposure at $\Gamma_L T = 4\ln(1+\sqrt{2}) = 3.53$ for small signals, independent of $n$. A moderate signal with a high Fock state raises this threshold (up to $\Gamma_\phi T \approx 11.5$ at $M = 0.3$, $n = 5$), while a large accumulated signal, or cooling acting on Fock states, lowers it.
